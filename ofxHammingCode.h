@@ -316,7 +316,7 @@ namespace H3126 {
         inline uint32_t decode(uint32_t h) {
             return ((h >> 6) & 0x3ffffff);
         }
-        
+
         inline bool isCorrect(uint32_t h) {
             return check_data(h) == 0;
         }
