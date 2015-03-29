@@ -26,34 +26,28 @@ typedef unsigned short uint32_t;
 
 BEGIN_NAMESPACE(ofxHammingCode)
 
-template <int n>
-inline uint8_t digit_sum_8(uint8_t c) {
-    return ((c >> (n - 1)) & 1) ^ digit_sum_8<n - 1>(c);
+uint8_t bit_sum_8(uint8_t b) {
+    b = ((b & 0xAA) >> 1) + (b & 0x55);
+    b = ((b & 0xCC) >> 2) + (b & 0x33);
+    b = ((b & 0xF0) >> 4) + (b & 0x0F);
+    return b & 1;
 }
 
-template <>
-inline uint8_t digit_sum_8<1>(uint8_t c) {
-    return c & 1;
+uint8_t bit_sum_16(uint16_t b) {
+    b = ((b & 0xAAAA) >> 1) + (b & 0x5555);
+    b = ((b & 0xCCCC) >> 2) + (b & 0x3333);
+    b = ((b & 0xF0F0) >> 4) + (b & 0x0F0F);
+    b = ((b & 0xFF00) >> 8) + (b & 0x00FF);
+    return b & 1;
 }
 
-template <int n>
-inline uint16_t digit_sum_16(uint16_t c) {
-    return ((c >> (n - 1)) & 1) ^ digit_sum_16<n - 1>(c);
-}
-
-template <>
-inline uint16_t digit_sum_16<1>(uint16_t c) {
-    return c & 1;
-}
-
-template <int n>
-inline uint32_t digit_sum_32(uint32_t c) {
-    return ((c >> (n - 1)) & 1) ^ digit_sum_32<n - 1>(c);
-}
-
-template <>
-inline uint32_t digit_sum_32<1>(uint32_t c) {
-    return c & 1;
+uint8_t bit_sum_32(uint32_t b) {
+    b = ((b & 0xAAAAAAAA) >>  1) + (b & 0x55555555);
+    b = ((b & 0xCCCCCCCC) >>  2) + (b & 0x33333333);
+    b = ((b & 0xF0F0F0F0) >>  4) + (b & 0x0F0F0F0F);
+    b = ((b & 0xFF00FF00) >>  8) + (b & 0x00FF00FF);
+    b = ((b & 0xFFFF0000) >> 16) + (b & 0x0000FFFF);
+    return b & 1;
 }
 
 namespace H74 {
@@ -84,14 +78,14 @@ namespace H74 {
 
         inline uint8_t encode_half(uint8_t d) {
             return ((d & 15) << 3)
-            | (digit_sum_8<4>(d & 11) << 2)
-            | (digit_sum_8<4>(d & 13) << 1)
-            | digit_sum_8<3>(d & 7);
+            | (bit_sum_8(d & 11) << 2)
+            | (bit_sum_8(d & 13) << 1)
+            | bit_sum_8(d & 7);
         }
         inline uint8_t check_data(uint8_t c) {
-            return (digit_sum_8<7>(c & 92) << 2)
-            | (digit_sum_8<7>(c & 106) << 1)
-            | digit_sum_8<7>(c & 57);
+            return (bit_sum_8(c & 92) << 2)
+            | (bit_sum_8(c & 106) << 1)
+            | bit_sum_8(c & 57);
         }
     };
 
@@ -131,15 +125,15 @@ namespace H74 {
         namespace {
             inline uint16_t add_parity(uint16_t data) {
                 return (data << 1)
-                | (digit_sum_8<8>(first(data)) << 8)
-                | digit_sum_8<8>(second(data));
+                | (bit_sum_8(first(data)) << 8)
+                | bit_sum_8(second(data));
             }
             
             inline uint8_t check_data(uint8_t c) {
-                return (digit_sum_8<8>(c & 184) << 3)
-                | (digit_sum_8<8>(c & 212) << 2)
-                | (digit_sum_8<8>(c & 114) << 1)
-                | digit_sum_8<8>(c & 255);
+                return (bit_sum_8(c & 184) << 3)
+                | (bit_sum_8(c & 212) << 2)
+                | (bit_sum_8(c & 114) << 1)
+                | bit_sum_8(c & 255);
             }
         };
         
@@ -219,21 +213,21 @@ namespace H3126 {
         };
         
         inline uint32_t check_data(uint32_t c) {
-            return (digit_sum_32<32>(c & 0x76969961) << 4)
-                | (digit_sum_32<32>(c & 0x6d5aaaa2) << 3)
-                | (digit_sum_32<32>(c & 0x5b3cccc4) << 2)
-                | (digit_sum_32<32>(c & 0x38ff0f08) << 1)
-                | digit_sum_32<32>(c & 0x7fff010);
+            return (bit_sum_32(c & 0x76969961) << 4)
+                | (bit_sum_32(c & 0x6d5aaaa2) << 3)
+                | (bit_sum_32(c & 0x5b3cccc4) << 2)
+                | (bit_sum_32(c & 0x38ff0f08) << 1)
+                | bit_sum_32(c & 0x7fff010);
         }
     };
 
     inline uint32_t encode(uint32_t data) {
         return ((data & 0x3ffffff) << 5)
-             | (digit_sum_32<22>(data & 0x3fff80) << 4)
-             | (digit_sum_32<25>(data & 0x1c7f878) << 3)
-             | (digit_sum_32<26>(data & 0x2d9e666) << 2)
-             | (digit_sum_32<26>(data & 0x36ad555) << 1)
-             | digit_sum_32<26>(data & 0x3b4b4cb);
+             | (bit_sum_32(data & 0x3fff80) << 4)
+             | (bit_sum_32(data & 0x1c7f878) << 3)
+             | (bit_sum_32(data & 0x2d9e666) << 2)
+             | (bit_sum_32(data & 0x36ad555) << 1)
+             | bit_sum_32(data & 0x3b4b4cb);
     }
 
     inline uint32_t decode(uint32_t h) {
@@ -302,16 +296,16 @@ namespace H3126 {
             };
             
             inline uint32_t add_parity(uint32_t data) {
-                return (data << 1) | digit_sum_32<32>(data);
+                return (data << 1) | bit_sum_32(data);
             }
             
             inline uint32_t check_data(uint32_t c) {
-                return (digit_sum_32<32>(c & 0xed2d32c2) << 5)
-                | (digit_sum_32<32>(c & 0xdab55544) << 4)
-                | (digit_sum_32<32>(c & 0xb6799988) << 3)
-                | (digit_sum_32<32>(c & 0x71fe1e10) << 2)
-                | (digit_sum_32<32>(c & 0x7fff010) << 1)
-                | (digit_sum_32<32>(c & 0x3ffffff));
+                return (bit_sum_32(c & 0xed2d32c2) << 5)
+                | (bit_sum_32(c & 0xdab55544) << 4)
+                | (bit_sum_32(c & 0xb6799988) << 3)
+                | (bit_sum_32(c & 0x71fe1e10) << 2)
+                | (bit_sum_32(c & 0x7fff010) << 1)
+                | (bit_sum_32(c & 0x3ffffff));
             }
         };
         
