@@ -21,7 +21,7 @@ typedef unsigned short uint16_t;
 
 #ifndef _UINT32_T
 #define _UINT32_T
-typedef unsigned short uint32_t;
+typedef unsigned int uint32_t;
 #endif /* _UINT32_T */
 
 BEGIN_NAMESPACE(ofxHammingCode)
