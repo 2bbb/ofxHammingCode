@@ -58,7 +58,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		95B0A9431AC7B2EC0045636C /* ofxHammingCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxHammingCode.h; sourceTree = "<group>"; };
+		959D5CF31AD102CB007F13DB /* ofxHammingCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxHammingCode.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -110,10 +110,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		959D5CF21AD102CB007F13DB /* src */ = {
+			isa = PBXGroup;
+			children = (
+				959D5CF31AD102CB007F13DB /* ofxHammingCode.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
 		95B0A9421AC7B2CC0045636C /* ofxHammingCode */ = {
 			isa = PBXGroup;
 			children = (
-				95B0A9431AC7B2EC0045636C /* ofxHammingCode.h */,
+				959D5CF21AD102CB007F13DB /* src */,
 			);
 			name = ofxHammingCode;
 			path = ../../../addons/ofxHammingCode;
