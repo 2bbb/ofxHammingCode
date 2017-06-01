@@ -86,6 +86,10 @@ MIT License.
 * ISHII 2bit [bufferRenaiss co., ltd.]
 * ishii[at]buffer-renaiss.com
 
+## Special Thanks
+
+* [wplatzer](https://github.com/wplatzer)
+
 ## At the last
 
 Please create new issue, if there is a problem.
