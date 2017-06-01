@@ -8,9 +8,11 @@ public:
         std::cout << std::endl;
         testH74SECDED();
         std::cout << std::endl;
-        test3126();
+        test3126(ofRandom(0, 1 << 25));
         std::cout << std::endl;
-        testH3126SECDED();
+        testH3126SECDED(ofRandom(0, 1 << 25));
+        std::cout << std::endl;
+        
         ofExit();
     }
     
@@ -137,10 +139,8 @@ public:
         }
     }
     
-    void test3126() {
+    void test3126(const std::uint32_t d) {
         ofLogNotice() << "==== H3126 ====" << std::endl;
-        std::uint32_t d;
-        d = 16972;
         
         ofLogNotice() << "raw data: " << d;
         uint32_t h = ofxHammingCode::H3126::encode(d);
@@ -175,11 +175,9 @@ public:
         }
     }
     
-    void testH3126SECDED() {
+    void testH3126SECDED(const std::uint32_t d) {
         ofLogNotice() << "==== H3126::SECDED ====";
         ofLogNotice() << "[single error correction, double error detection]" << std::endl;
-        std::uint32_t d;
-        d = 16972;
         
         ofLogNotice() << "raw data: " << d;
         std::uint32_t h = ofxHammingCode::H3126::SECDED::encode(d);
